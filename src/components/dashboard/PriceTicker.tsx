@@ -1,7 +1,7 @@
 "use client";
 
 import { useGoldPrice } from "@/hooks/useGoldPrice";
-import { TrendingUp, RefreshCcw } from "lucide-react";
+import { RefreshCcw } from "lucide-react";
 import Marquee from "react-fast-marquee";
 
 export function PriceTicker() {

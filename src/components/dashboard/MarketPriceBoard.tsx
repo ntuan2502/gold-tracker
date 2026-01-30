@@ -62,8 +62,6 @@ export function MarketPriceBoard({ prices, loading }: MarketPriceBoardProps) {
         };
     }, [prices]);
 
-    if (loading) return <div className="h-40 animate-pulse rounded-xl bg-muted"></div>;
-
     const extractBrand = (type: string) => {
         // Remove (Miếng), (Nhẫn) etc to get clearer brand name
         return type.replace(/\s*\([^)]*\)/g, "").trim();
@@ -72,6 +70,8 @@ export function MarketPriceBoard({ prices, loading }: MarketPriceBoardProps) {
     const lastUpdated = useMemo(() => {
         return prices.length > 0 ? prices[0].updated : null;
     }, [prices]);
+
+    if (loading) return <div className="h-40 animate-pulse rounded-xl bg-muted"></div>;
 
     return (
         <div className="space-y-6">

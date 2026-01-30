@@ -152,17 +152,27 @@ export function TransactionDialog({ existingTransaction, trigger }: TransactionD
                         {type.startsWith('gift') && (
                             <div className="flex gap-2 mb-2 p-1 bg-secondary/50 rounded-lg">
                                 <Button
-                                    variant={type === 'gift_in' ? 'default' : 'ghost'}
+                                    variant="ghost"
                                     size="sm"
-                                    className="flex-1 h-7 text-xs"
+                                    className={cn(
+                                        "flex-1 h-7 text-xs transition-all",
+                                        type === 'gift_in'
+                                            ? "bg-purple-100 text-purple-700 hover:bg-purple-200 shadow-sm font-semibold"
+                                            : "hover:bg-purple-50 text-muted-foreground"
+                                    )}
                                     onClick={() => setType('gift_in')}
                                 >
                                     Được Tặng (Nhập)
                                 </Button>
                                 <Button
-                                    variant={type === 'gift_out' ? 'default' : 'ghost'}
+                                    variant="ghost"
                                     size="sm"
-                                    className="flex-1 h-7 text-xs"
+                                    className={cn(
+                                        "flex-1 h-7 text-xs transition-all",
+                                        type === 'gift_out'
+                                            ? "bg-orange-100 text-orange-700 hover:bg-orange-200 shadow-sm font-semibold"
+                                            : "hover:bg-orange-50 text-muted-foreground"
+                                    )}
                                     onClick={() => setType('gift_out')}
                                 >
                                     Tặng/Biếu (Xuất)
@@ -283,7 +293,8 @@ export function TransactionDialog({ existingTransaction, trigger }: TransactionD
                             onClick={handleSubmit}
                             className={`w-full text-white ${type === 'buy' ? 'bg-green-600 hover:bg-green-700' :
                                 type === 'sell' ? 'bg-red-600 hover:bg-red-700' :
-                                    'bg-purple-600 hover:bg-purple-700'
+                                    type === 'gift_in' ? 'bg-purple-600 hover:bg-purple-700' :
+                                        'bg-orange-600 hover:bg-orange-700'
                                 }`}
                             disabled={loading}
                         >

@@ -5,7 +5,7 @@ import { Transaction } from "@/store/portfolioStore";
 import { usePortfolioStore } from "@/store/portfolioStore";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, Filter, ArrowUpRight, ArrowDownRight, Gift, Trash2, Pencil, HandHeart } from "lucide-react";
+import { Search, Filter, ArrowUpRight, ArrowDownRight, Gift, Trash2, Pencil, PiggyBank } from "lucide-react";
 import { TransactionDialog } from "./TransactionDialog";
 import { cn } from "@/lib/utils";
 import {
@@ -120,8 +120,8 @@ export function TransactionHistory({ transactions }: TransactionHistoryProps) {
                                 )}>
                                     {t.type === 'buy' ? <ArrowDownRight className="h-5 w-5" /> :
                                         t.type === 'sell' ? <ArrowUpRight className="h-5 w-5" /> :
-                                            t.type === 'gift_in' ? <Gift className="h-5 w-5" /> :
-                                                <HandHeart className="h-5 w-5" />}
+                                            t.type === 'gift_in' ? <PiggyBank className="h-5 w-5" /> :
+                                                <Gift className="h-5 w-5" />}
                                 </div>
 
                                 {/* 2. Info (Middle) */}

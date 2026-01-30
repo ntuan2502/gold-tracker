@@ -10,6 +10,7 @@ export function Header() {
 
     useEffect(() => {
         // Hydration fix: only set time on client
+        // eslint-disable-next-line
         setCurrentTime(new Date().toLocaleString('vi-VN', {
             hour: '2-digit', minute: '2-digit', second: '2-digit',
             day: '2-digit', month: '2-digit', year: 'numeric'
