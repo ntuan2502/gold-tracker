@@ -75,7 +75,7 @@ export function MarketPriceBoard({ prices, loading }: MarketPriceBoardProps) {
 
     return (
         <div className="space-y-6">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                 <div>
                     <h3 className="flex items-center gap-2 text-lg font-semibold">
                         <TrendingUp className="h-5 w-5 text-primary" />
@@ -89,7 +89,7 @@ export function MarketPriceBoard({ prices, loading }: MarketPriceBoardProps) {
                 </div>
 
                 {/* Brand Tabs */}
-                <div className="flex gap-2 overflow-x-auto pb-2 sm:pb-0 scrollbar-hide">
+                <div className="flex gap-2 overflow-x-auto pb-2 lg:pb-0 scrollbar-hide">
                     {availableBrands.map(brand => (
                         <button
                             key={brand}
@@ -114,20 +114,20 @@ export function MarketPriceBoard({ prices, loading }: MarketPriceBoardProps) {
                     <>
                         <div className="rounded-xl border bg-card p-4 shadow-sm transition-all hover:border-amber-200 hover:bg-amber-50/30">
                             <div className="flex items-center gap-2 mb-2 text-muted-foreground">
-                                <BarChart3 className="h-4 w-4 text-amber-500" />
+                                <BarChart3 className="h-4 w-4 text-red-600" />
                                 <span className="text-xs font-medium uppercase">Miếng - Mua vào</span>
                             </div>
-                            <p className="text-xl font-bold tracking-tight">
+                            <p className="text-xl font-bold tracking-tight text-red-600 dark:text-red-400">
                                 {(brandPrices.mieng.buy / 10).toLocaleString('vi-VN')}
                                 <span className="text-sm font-normal text-muted-foreground ml-1">₫</span>
                             </p>
                         </div>
                         <div className="rounded-xl border bg-card p-4 shadow-sm transition-all hover:border-amber-200 hover:bg-amber-50/30">
                             <div className="flex items-center gap-2 mb-2 text-muted-foreground">
-                                <BarChart3 className="h-4 w-4 text-amber-500" />
+                                <BarChart3 className="h-4 w-4 text-green-600" />
                                 <span className="text-xs font-medium uppercase">Miếng - Bán ra</span>
                             </div>
-                            <p className="text-xl font-bold tracking-tight">
+                            <p className="text-xl font-bold tracking-tight text-green-600 dark:text-green-400">
                                 {(brandPrices.mieng.sell / 10).toLocaleString('vi-VN')}
                                 <span className="text-sm font-normal text-muted-foreground ml-1">₫</span>
                             </p>
@@ -144,20 +144,20 @@ export function MarketPriceBoard({ prices, loading }: MarketPriceBoardProps) {
                     <>
                         <div className="rounded-xl border bg-card p-4 shadow-sm transition-all hover:border-rose-200 hover:bg-rose-50/30">
                             <div className="flex items-center gap-2 mb-2 text-muted-foreground">
-                                <Coins className="h-4 w-4 text-rose-500" />
+                                <Coins className="h-4 w-4 text-red-600" />
                                 <span className="text-xs font-medium uppercase">Nhẫn - Mua vào</span>
                             </div>
-                            <p className="text-xl font-bold tracking-tight">
+                            <p className="text-xl font-bold tracking-tight text-red-600 dark:text-red-400">
                                 {(brandPrices.nhan.buy / 10).toLocaleString('vi-VN')}
                                 <span className="text-sm font-normal text-muted-foreground ml-1">₫</span>
                             </p>
                         </div>
                         <div className="rounded-xl border bg-card p-4 shadow-sm transition-all hover:border-rose-200 hover:bg-rose-50/30">
                             <div className="flex items-center gap-2 mb-2 text-muted-foreground">
-                                <Coins className="h-4 w-4 text-rose-500" />
+                                <Coins className="h-4 w-4 text-green-600" />
                                 <span className="text-xs font-medium uppercase">Nhẫn - Bán ra</span>
                             </div>
-                            <p className="text-xl font-bold tracking-tight">
+                            <p className="text-xl font-bold tracking-tight text-green-600 dark:text-green-400">
                                 {(brandPrices.nhan.sell / 10).toLocaleString('vi-VN')}
                                 <span className="text-sm font-normal text-muted-foreground ml-1">₫</span>
                             </p>
@@ -185,16 +185,16 @@ export function MarketPriceBoard({ prices, loading }: MarketPriceBoardProps) {
                             <div className="grid grid-cols-2 gap-4 text-sm">
                                 <div>
                                     <span className="block text-[10px] uppercase text-muted-foreground font-semibold">Mua Rẻ Nhất</span>
-                                    <div className="mt-1 font-medium text-green-700">
+                                    <div className="mt-1 font-medium text-red-700">
                                         {extractBrand(insights.mieng.bestBuy.type)}
-                                        <div className="text-lg font-bold">{(insights.mieng.bestBuy.sell / 10).toLocaleString('vi-VN')}</div>
+                                        <div className="text-xl font-bold">{(insights.mieng.bestBuy.sell / 10).toLocaleString('vi-VN')}</div>
                                     </div>
                                 </div>
                                 <div className="text-right">
                                     <span className="block text-[10px] uppercase text-muted-foreground font-semibold">Bán Cao Nhất</span>
-                                    <div className="mt-1 font-medium text-blue-700">
+                                    <div className="mt-1 font-medium text-green-700">
                                         {extractBrand(insights.mieng.bestSell.type)}
-                                        <div className="text-lg font-bold">{(insights.mieng.bestSell.buy / 10).toLocaleString('vi-VN')}</div>
+                                        <div className="text-xl font-bold">{(insights.mieng.bestSell.buy / 10).toLocaleString('vi-VN')}</div>
                                     </div>
                                 </div>
                             </div>
@@ -213,16 +213,16 @@ export function MarketPriceBoard({ prices, loading }: MarketPriceBoardProps) {
                             <div className="grid grid-cols-2 gap-4 text-sm">
                                 <div>
                                     <span className="block text-[10px] uppercase text-muted-foreground font-semibold">Mua Rẻ Nhất</span>
-                                    <div className="mt-1 font-medium text-green-700">
+                                    <div className="mt-1 font-medium text-red-700">
                                         {extractBrand(insights.nhan.bestBuy.type)}
-                                        <div className="text-lg font-bold">{(insights.nhan.bestBuy.sell / 10).toLocaleString('vi-VN')}</div>
+                                        <div className="text-xl font-bold">{(insights.nhan.bestBuy.sell / 10).toLocaleString('vi-VN')}</div>
                                     </div>
                                 </div>
                                 <div className="text-right">
                                     <span className="block text-[10px] uppercase text-muted-foreground font-semibold">Bán Cao Nhất</span>
-                                    <div className="mt-1 font-medium text-blue-700">
+                                    <div className="mt-1 font-medium text-green-700">
                                         {extractBrand(insights.nhan.bestSell.type)}
-                                        <div className="text-lg font-bold">{(insights.nhan.bestSell.buy / 10).toLocaleString('vi-VN')}</div>
+                                        <div className="text-xl font-bold">{(insights.nhan.bestSell.buy / 10).toLocaleString('vi-VN')}</div>
                                     </div>
                                 </div>
                             </div>

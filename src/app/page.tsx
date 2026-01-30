@@ -124,7 +124,7 @@ export default function Home() {
             {/* Total Asset */}
             <div className="text-center md:text-right">
               <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Tổng Tài Sản</p>
-              <p className="text-xl font-bold text-primary sm:text-2xl truncate">
+              <p className="text-xl font-bold text-primary truncate">
                 {Math.round(totalAssetValue).toLocaleString('vi-VN')} <span className="text-sm font-normal text-muted-foreground">₫</span>
               </p>
             </div>
@@ -154,7 +154,7 @@ export default function Home() {
           {/* Investment Portfolio */}
           <div className="rounded-xl border bg-card text-card-foreground shadow-sm p-6 space-y-4">
             <div className="flex items-center gap-3 mb-2">
-              <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+              <div className="h-10 w-10 rounded-full bg-red-100 flex items-center justify-center text-red-600">
                 <Coins className="h-5 w-5" />
               </div>
               <div>
@@ -215,7 +215,7 @@ export default function Home() {
               </div>
               <div className="col-span-2">
                 <p className="text-sm text-muted-foreground">Giá trị tài sản</p>
-                <p className="text-2xl font-bold text-purple-600">{Math.round(giftValue).toLocaleString('vi-VN')} ₫</p>
+                <p className="text-xl font-bold text-purple-600">{Math.round(giftValue).toLocaleString('vi-VN')} ₫</p>
                 <p className="text-xs text-muted-foreground mt-1">Lãi ròng 100%</p>
               </div>
             </div>

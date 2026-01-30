@@ -114,7 +114,7 @@ export function TransactionHistory({ transactions }: TransactionHistoryProps) {
                                 <div className={cn(
                                     "flex h-10 w-10 shrink-0 items-center justify-center rounded-full mt-1 sm:mt-0",
                                     t.type === 'buy' ? "bg-red-100 text-red-600 dark:bg-red-900/20 dark:text-red-400" :
-                                        t.type === 'sell' ? "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/20 dark:text-emerald-400" :
+                                        t.type === 'sell' ? "bg-green-100 text-green-600 dark:bg-green-900/20 dark:text-green-400" :
                                             t.type === 'gift_in' ? "bg-purple-100 text-purple-600 dark:bg-purple-900/20 dark:text-purple-400" :
                                                 "bg-orange-100 text-orange-600 dark:bg-orange-900/20 dark:text-orange-400"
                                 )}>
@@ -167,7 +167,7 @@ export function TransactionHistory({ transactions }: TransactionHistoryProps) {
                                         <p className={cn(
                                             "font-bold text-sm sm:text-base tabular-nums leading-tight",
                                             t.type === 'buy' ? "text-red-600 dark:text-red-400" :
-                                                t.type === 'sell' ? "text-emerald-600" :
+                                                t.type === 'sell' ? "text-green-600 dark:text-green-400" :
                                                     t.type === 'gift_in' ? "text-purple-600" :
                                                         "text-orange-600"
                                         )}>
