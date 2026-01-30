@@ -92,10 +92,10 @@ export default function Home() {
     <div className="flex flex-col min-h-screen pb-12">
       <div className="container mx-auto max-w-7xl px-4 md:px-8 py-6 flex flex-col gap-8">
         {/* Compact Header Section with Asset Stats */}
-        <div className="rounded-xl border bg-card p-4 shadow-sm flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div className="rounded-xl border bg-card p-4 shadow-sm flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
 
           {/* 1. Header Top (Mobile): User Info */}
-          <div className="min-w-0 md:flex-none">
+          <div className="min-w-0 lg:flex-none">
             <p className="text-xs font-medium text-muted-foreground">Chào mừng,</p>
             <h2 className="text-lg font-bold truncate pr-2" title={user?.displayName || "Nhà đầu tư"}>
               {user ? user.displayName : "Nhà đầu tư"}
@@ -103,15 +103,15 @@ export default function Home() {
           </div>
 
           {/* 2. Middle (Mobile): Action Button (Full Width) | Right (Desktop) */}
-          <div className="w-full md:w-auto md:order-3">
+          <div className="w-full lg:w-auto lg:order-3">
             {!user ? (
-              <Button onClick={login} className="w-full md:w-auto shadow-lg shadow-primary/20">
+              <Button onClick={login} className="w-full lg:w-auto shadow-lg shadow-primary/20">
                 Bắt đầu <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             ) : (
               <TransactionDialog
                 trigger={
-                  <Button className="w-full md:w-auto bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/20">
+                  <Button className="w-full lg:w-auto bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/20">
                     <Plus className="mr-2 h-4 w-4" /> Thêm giao dịch
                   </Button>
                 }
@@ -120,9 +120,9 @@ export default function Home() {
           </div>
 
           {/* 3. Bottom (Mobile): Stats Stacked | Center (Desktop) */}
-          <div className="flex flex-col gap-3 border-t pt-4 md:border-t-0 md:pt-0 md:flex-row md:items-center md:gap-8 md:order-2 md:px-8">
+          <div className="flex flex-col gap-3 border-t pt-4 lg:border-t-0 lg:pt-0 lg:flex-row lg:items-center lg:gap-8 lg:order-2 lg:px-8">
             {/* Total Asset */}
-            <div className="text-center md:text-right">
+            <div className="text-center lg:text-right">
               <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Tổng Tài Sản</p>
               <p className="text-xl font-bold text-primary truncate">
                 {Math.round(totalAssetValue).toLocaleString('vi-VN')} <span className="text-sm font-normal text-muted-foreground">₫</span>
@@ -130,13 +130,13 @@ export default function Home() {
             </div>
 
             {/* Divider (Desktop Only) */}
-            <div className="hidden md:block h-8 w-px bg-border/50"></div>
+            <div className="hidden lg:block h-8 w-px bg-border/50"></div>
 
             {/* Profit/Loss */}
-            <div className="text-center md:text-left">
+            <div className="text-center lg:text-left">
               <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Lợi Nhuận</p>
-              <div className={`flex items-center justify-center md:justify-start gap-1 font-bold ${profitLoss > 0 ? 'text-green-600' : profitLoss < 0 ? 'text-red-600' : 'text-foreground'}`}>
-                <span className="text-xl sm:text-2xl truncate">
+              <div className={`flex items-center justify-center lg:justify-start gap-1 font-bold ${profitLoss > 0 ? 'text-green-600' : profitLoss < 0 ? 'text-red-600' : 'text-foreground'}`}>
+                <span className="text-xl truncate">
                   {profitLoss > 0 ? '+' : ''}{Math.round(profitLoss).toLocaleString('vi-VN')} <span className="text-sm font-normal">₫</span>
                 </span>
                 {profitLoss > 0 && <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5 shrink-0" />}
@@ -223,7 +223,7 @@ export default function Home() {
         </div>
 
         {/* 3. Transaction History Section */}
-        <div className="mt-8">
+        <div>
           <TransactionHistory transactions={transactions} />
         </div>
       </div>
