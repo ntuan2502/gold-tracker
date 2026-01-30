@@ -44,10 +44,14 @@ Dự án sử dụng **Bun**. Hãy đảm bảo bạn đã cài đặt Bun.
 git clone https://github.com/ntuan2502/gold-tracker.git
 cd gold-tracker
 
-# 2. Cài đặt dependencies
+# 2. Cấu hình môi trường
+cp .env.example .env.local
+# Mở file .env.local và điền các thông tin từ Firebase Console của bạn
+
+# 3. Cài đặt dependencies
 bun install
 
-# 3. Chạy server development
+# 4. Chạy server development
 bun run dev
 ```
 
