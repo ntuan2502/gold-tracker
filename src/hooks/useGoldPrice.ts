@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 // Types for Gold Price Data
 export interface GoldPrice {
@@ -10,13 +11,7 @@ export interface GoldPrice {
     updated: string;
 }
 
-// Mock API responses for fallback
-const MOCK_API_RESPONSE = [
-    { type: "SJC", buy: 82500000, sell: 84500000 },
-    { type: "Nhẫn Trơn 9999", buy: 75500000, sell: 77000000 },
-    { type: "Vàng Thế Giới (USD/oz)", buy: 2350 * 25000, sell: 2351 * 25000 },
-];
-
+// Mock API removed
 export const useGoldPrice = () => {
     const [prices, setPrices] = useState<GoldPrice[]>([]);
     const [loading, setLoading] = useState(true);
@@ -26,24 +21,25 @@ export const useGoldPrice = () => {
         setLoading(true);
         try {
             const res = await fetch('/api/gold-price');
-            if (!res.ok) throw new Error('API Failed');
+            if (!res.ok) {
+                toast.error("Không thể kết nối lấy giá vàng!");
+                setError("Lỗi kết nối");
+                return;
+            }
             const { data } = await res.json();
 
             if (data && data.length > 0) {
                 setPrices(data);
                 setError(null);
             } else {
-                throw new Error("No data returned");
+                toast.error("Dữ liệu giá vàng rỗng!");
+                setError("Dữ liệu rỗng");
             }
         } catch (err) {
-            console.warn("API Fetch Failed, using Mock Data", err);
-            setError("Failed to fetch real prices, using Last Known");
-            // Fallback
-            const staticData = MOCK_API_RESPONSE.map(p => ({
-                ...p,
-                updated: new Date().toLocaleTimeString('vi-VN')
-            }));
-            setPrices(staticData);
+            console.error("API Fetch Failed", err);
+            toast.error("Không thể cập nhật giá vàng. Vui lòng kiểm tra kết nối!");
+            setError("Lỗi cập nhật dữ liệu");
+            setPrices([]); // Clear prices or handle as needed
         } finally {
             setLoading(false);
         }
