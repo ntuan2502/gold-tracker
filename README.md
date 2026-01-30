@@ -41,7 +41,7 @@ Dự án sử dụng **Bun**. Hãy đảm bảo bạn đã cài đặt Bun.
 
 ```bash
 # 1. Clone dự án
-git clone https://github.com/your-username/gold-tracker.git
+git clone https://github.com/ntuan2502/gold-tracker.git
 cd gold-tracker
 
 # 2. Cài đặt dependencies
@@ -56,6 +56,14 @@ Truy cập `http://localhost:3000` để trải nghiệm.
 ## 📱 Giao Diện Mobile
 - **Header thông minh**: Tự động thu gọn tên người dùng và hiển thị nút "Thêm giao dịch" full-width thuận tiện thao tác một tay.
 - **Thống kê phân tầng**: Tổng tài sản và Lợi nhuận được tách dòng rõ ràng, đảm bảo hiển thị tốt với số tiền hàng chục tỷ đồng.
+
+## ⚠️ Troubleshooting (Sự cố thường gặp)
+
+### Lỗi: `auth/unauthorized-domain` khi Deploy lên Vercel
+Đây là tính năng bảo mật của Firebase. Để fix:
+1. Truy cập [Firebase Console](https://console.firebase.google.com/).
+2. Vào **Authentication** -> **Settings** -> **Authorized domains**.
+3. Nhấn **Add domain** và thêm domain của bạn (ví dụ: `gold-tracker.vercel.app`).
 
 ## 📄 License
 MIT License.
