@@ -44,7 +44,7 @@ Dự án sử dụng **Bun**. Hãy đảm bảo bạn đã cài đặt Bun.
 ```bash
 # 1. Clone dự án
 git clone https://github.com/ntuan2502/oh-my-gold.git
-cd gold-tracker
+cd oh-my-gold
 
 # 2. Cấu hình môi trường
 cp .env.example .env.local
@@ -62,6 +62,25 @@ Truy cập `http://localhost:3000` để trải nghiệm.
 ## 📱 Giao Diện Mobile
 - **Header thông minh**: Tự động thu gọn tên người dùng và hiển thị nút "Thêm giao dịch" full-width thuận tiện thao tác một tay.
 - **Thống kê phân tầng**: Tổng tài sản và Lợi nhuận được tách dòng rõ ràng, đảm bảo hiển thị tốt với số tiền hàng chục tỷ đồng.
+
+## 🛡️ Firebase Security Rules
+
+Để đảm bảo dữ liệu riêng tư của mỗi người dùng (dữ liệu của ai người đó thấy), hãy copy đoạn code dưới đây vào tab **Rules** trong Firebase Firestore:
+
+```javascript
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /transactions/{transactionId} {
+      // Chỉ cho phép đọc/ghi nếu người dùng đã đăng nhập
+      // VÀ chỉ được truy cập dữ liệu của chính mình (userId khớp với Auth ID)
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow read, update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+    }
+  }
+}
+```
 
 ## ⚠️ Troubleshooting (Sự cố thường gặp)
 
