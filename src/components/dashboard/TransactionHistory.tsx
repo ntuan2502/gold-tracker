@@ -33,6 +33,42 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+import { SUPPORTED_BRANDS } from "@/lib/constants";
+
+const MobileNote = ({ note }: { note: string }) => {
+    const [isExpanded, setIsExpanded] = useState(false);
+    const maxLength = 60; // Characters to show before truncating
+
+    if (note.length <= maxLength) {
+        return (
+            <div className="mt-1 pl-[52px] text-xs text-muted-foreground italic break-words relative z-10">
+                "{note}"
+            </div>
+        );
+    }
+
+    return (
+        <div className="mt-1 pl-[52px] text-xs text-muted-foreground italic break-words relative z-10">
+            "{isExpanded ? note : `${note.slice(0, maxLength)}...`}"
+            <button
+                onClick={(e) => {
+                    e.stopPropagation();
+                    setIsExpanded(!isExpanded);
+                }}
+                className="ml-1 text-blue-600 dark:text-blue-400 hover:underline not-italic font-medium inline-block"
+            >
+                {isExpanded ? "Thu gọn" : "Xem thêm"}
+            </button>
+        </div>
+    );
+};
 
 interface TransactionHistoryProps {
     transactions: Transaction[];
@@ -43,16 +79,26 @@ type FilterType = 'all' | 'buy' | 'sell' | 'gift';
 export function TransactionHistory({ transactions }: TransactionHistoryProps) {
     const { removeTransaction } = usePortfolioStore();
     const [searchTerm, setSearchTerm] = useState("");
+
     const [filterType, setFilterType] = useState<FilterType>('all');
+    const [filterBrand, setFilterBrand] = useState<string>('all');
+    const [filterGoldType, setFilterGoldType] = useState<string>('all');
     const [sortOrder] = useState<'desc' | 'asc'>('desc');
 
     // Filter Logic
     const filteredTransactions = useMemo(() => {
         return transactions.filter(t => {
             // 1. Type Filter
+            // 1. Type Filter
             if (filterType === 'buy' && t.type !== 'buy') return false;
             if (filterType === 'sell' && t.type !== 'sell') return false;
             if (filterType === 'gift' && !t.type.startsWith('gift')) return false;
+
+            // 2. Brand Filter
+            if (filterBrand !== 'all' && t.brand !== filterBrand) return false;
+
+            // 3. Gold Type Filter
+            if (filterGoldType !== 'all' && t.goldType !== filterGoldType) return false;
 
             // 2. Search Filter (Note or Gold Type or Date)
             if (searchTerm) {
@@ -69,14 +115,14 @@ export function TransactionHistory({ transactions }: TransactionHistoryProps) {
             const dateB = new Date(b.date).getTime();
             return sortOrder === 'desc' ? dateB - dateA : dateA - dateB;
         });
-    }, [transactions, filterType, searchTerm, sortOrder]);
+    }, [transactions, filterType, filterBrand, filterGoldType, searchTerm, sortOrder]);
 
 
 
     return (
         <div className="rounded-xl border bg-card text-card-foreground shadow-sm">
             {/* Header with Search & Controls */}
-            <div className="flex flex-col gap-4 border-b p-6 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-4 border-b p-6 lg:flex-row lg:items-center lg:justify-between">
                 <div>
                     <h3 className="text-xl font-semibold">Lịch Sử Giao Dịch</h3>
                     <p className="text-sm text-muted-foreground">
@@ -84,31 +130,55 @@ export function TransactionHistory({ transactions }: TransactionHistoryProps) {
                     </p>
                 </div>
 
-                <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+                <div className="flex flex-col gap-2 lg:flex-row lg:items-center">
                     <div className="relative">
                         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                         <Input
                             placeholder="Tìm kiếm..."
-                            className="bg-background pl-9 w-full sm:w-[200px]"
+                            className="bg-background pl-9 w-full lg:w-[200px]"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
                     </div>
-                    <div className="flex gap-1 rounded-lg bg-muted p-1">
-                        {(['all', 'buy', 'sell', 'gift'] as const).map((type) => (
-                            <button
-                                key={type}
-                                onClick={() => setFilterType(type)}
-                                className={cn(
-                                    "px-3 py-1.5 text-xs font-medium rounded-md transition-all",
-                                    filterType === type
-                                        ? "bg-background text-foreground shadow-sm"
-                                        : "text-muted-foreground hover:bg-background/50 hover:text-foreground"
-                                )}
-                            >
-                                {type === 'all' ? 'Tất cả' : type === 'buy' ? 'Mua' : type === 'sell' ? 'Bán' : 'Quà'}
-                            </button>
-                        ))}
+                    <div className="grid grid-cols-3 gap-2 lg:flex lg:flex-row">
+                        {/* Type Filter */}
+                        <Select value={filterType} onValueChange={(v) => setFilterType(v as FilterType)}>
+                            <SelectTrigger className="w-full lg:w-[110px]">
+                                <SelectValue placeholder="Loại" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="all">Tất cả</SelectItem>
+                                <SelectItem value="buy">Mua</SelectItem>
+                                <SelectItem value="sell">Bán</SelectItem>
+                                <SelectItem value="gift">Quà</SelectItem>
+                            </SelectContent>
+                        </Select>
+
+                        {/* Gold Type Filter */}
+                        <Select value={filterGoldType} onValueChange={setFilterGoldType}>
+                            <SelectTrigger className="w-full lg:w-[130px]">
+                                <SelectValue placeholder="Sản phẩm" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="all">Tất cả SP</SelectItem>
+                                <SelectItem value="sjc">SJC</SelectItem>
+                                <SelectItem value="nhan_9999">Nhẫn 9999</SelectItem>
+                                <SelectItem value="jewelry">Trang sức</SelectItem>
+                            </SelectContent>
+                        </Select>
+
+                        {/* Brand Filter */}
+                        <Select value={filterBrand} onValueChange={setFilterBrand}>
+                            <SelectTrigger className="w-full lg:w-[130px]">
+                                <SelectValue placeholder="Thương hiệu" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="all">Tất cả TH</SelectItem>
+                                {SUPPORTED_BRANDS.map(brand => (
+                                    <SelectItem key={brand} value={brand}>{brand}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     </div>
                 </div>
             </div>
@@ -123,7 +193,7 @@ export function TransactionHistory({ transactions }: TransactionHistoryProps) {
                 ) : (
                     <>
                         {/* MOBILE VIEW (< md) */}
-                        <div className="divide-y md:hidden">
+                        <div className="divide-y lg:hidden">
                             {filteredTransactions.map((t) => (
                                 <div key={t.id} className="relative group p-4 hover:bg-muted/50 transition-colors">
                                     <div className="grid grid-cols-[auto_1fr_auto] gap-3 items-start">
@@ -217,17 +287,13 @@ export function TransactionHistory({ transactions }: TransactionHistoryProps) {
 
                                     {/* Note Section (New Row) */}
                                     {/* Note Section */}
-                                    {t.note && (
-                                        <div className="mt-1 pl-[52px] text-xs text-muted-foreground italic break-words relative z-10">
-                                            "{t.note}"
-                                        </div>
-                                    )}
+                                    {t.note && <MobileNote note={t.note} />}
                                 </div>
                             ))}
                         </div>
 
                         {/* DESKTOP VIEW (Table) */}
-                        <div className="hidden md:block px-6 pb-4">
+                        <div className="hidden lg:block px-6 pb-4">
                             <Table>
                                 <TableHeader>
                                     <TableRow className="hover:bg-transparent">
