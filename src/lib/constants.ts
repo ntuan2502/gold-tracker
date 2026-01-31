@@ -2,7 +2,7 @@ export const SUPPORTED_BRANDS = ["SJC", "DOJI", "PNJ", "Bảo Tín Minh Châu", 
 
 export const GOLD_TYPES = [
     { value: "bar", label: "Vàng miếng" },
-    { value: "nhan_9999", label: "Nhẫn tròn 9999" }
+    { value: "ring_9999", label: "Nhẫn tròn 9999" }
 ];
 
 export const SCRAPER_CONFIG = {

@@ -53,17 +53,16 @@ export default function Home() {
     // Pattern: "Brand (Type)" e.g. "PNJ (Nhẫn)", "SJC (Miếng)"
     let searchTerm = "";
 
-    if (goldType === "sjc") searchTerm = `${brand} (Miếng)`;
-    else if (goldType === "nhan_9999") searchTerm = `${brand} (Nhẫn)`;
-    else if (goldType === "jewelry") searchTerm = `${brand} (Nhẫn)`; // Approximation for jewelry usually follows Ring price or specific
+    if (goldType === "bar") searchTerm = `${brand} (Miếng)`;
+    else if (goldType === "ring_9999") searchTerm = `${brand} (Nhẫn)`;
 
     // 1. Try Specific Brand Search
     let match = prices.find(p => p.type.includes(searchTerm));
     if (match && match.buy) return match.buy / 10;
 
     // 2. Fallback: Try generic Type search if Brand specific fails (e.g. data source issue)
-    if (goldType === "sjc") match = prices.find(p => p.type.includes("SJC (Miếng)"));
-    else if (goldType === "nhan_9999") match = prices.find(p => p.type.includes("SJC (Nhẫn)") || p.type.includes("Nhẫn"));
+    if (goldType === "bar") match = prices.find(p => p.type.includes("SJC (Miếng)"));
+    else if (goldType === "ring_9999") match = prices.find(p => p.type.includes("SJC (Nhẫn)") || p.type.includes("Nhẫn"));
 
     if (match && match.buy) return match.buy / 10;
 
