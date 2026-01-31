@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, Filter, ArrowUpRight, ArrowDownRight, Gift, Trash2, Pencil, PiggyBank } from "lucide-react";
 import { TransactionDialog } from "./TransactionDialog";
+import { DataManagement } from "./DataManagement";
 import { cn } from "@/lib/utils";
 import {
     AlertDialog,
@@ -131,6 +132,11 @@ export function TransactionHistory({ transactions }: TransactionHistoryProps) {
                 </div>
 
                 <div className="flex flex-col gap-2 lg:flex-row lg:items-center">
+                    {/* Data Tools */}
+                    <div className="flex justify-end lg:order-last">
+                        <DataManagement />
+                    </div>
+
                     <div className="relative">
                         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                         <Input

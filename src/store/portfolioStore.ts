@@ -32,6 +32,7 @@ interface PortfolioState {
     addTransaction: (transaction: Omit<Transaction, "id">, userId?: string) => Promise<void>;
     updateTransaction: (id: string, data: Partial<Transaction>) => Promise<void>;
     removeTransaction: (id: string) => Promise<void>;
+    importTransactions: (transactions: Omit<Transaction, "id">[], userId?: string) => Promise<{ added: number; skipped: number }>;
     clearData: () => void; // New action
     getHoldings: () => {
         totalQuantity: number;
@@ -127,6 +128,54 @@ export const usePortfolioStore = create<PortfolioState>((set, get) => ({
             set((state) => ({
                 transactions: state.transactions.filter((t) => t.id !== id),
             }));
+        }
+    },
+
+    importTransactions: async (newTransactions, userId) => {
+        const { transactions: currentTransactions } = get();
+
+        // 1. Filter out duplicates
+        const uniqueTransactions = newTransactions.filter(newTx => {
+            const isDuplicate = currentTransactions.some(existing =>
+                existing.type === newTx.type &&
+                existing.goldType === newTx.goldType &&
+                (existing.brand || "") === (newTx.brand || "") &&
+                existing.quantity === newTx.quantity &&
+                existing.price === newTx.price &&
+                (existing.note || "") === (newTx.note || "") &&
+                existing.date === newTx.date
+            );
+            return !isDuplicate;
+        });
+
+        const skippedCount = newTransactions.length - uniqueTransactions.length;
+
+        if (uniqueTransactions.length === 0) {
+            return { added: 0, skipped: skippedCount };
+        }
+
+        if (!userId) {
+            // Local fallback
+            set((state) => ({
+                transactions: [
+                    ...uniqueTransactions.map(t => ({ ...t, id: crypto.randomUUID() })),
+                    ...state.transactions,
+                ],
+            }));
+            return { added: uniqueTransactions.length, skipped: skippedCount };
+        }
+
+        try {
+            const promises = uniqueTransactions.map(t => addDoc(collection(db, "transactions"), {
+                ...t,
+                userId,
+                createdAt: new Date().toISOString()
+            }));
+            await Promise.all(promises);
+            return { added: uniqueTransactions.length, skipped: skippedCount };
+        } catch (e) {
+            console.error("Import Error", e);
+            throw e;
         }
     },
 
