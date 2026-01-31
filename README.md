@@ -43,7 +43,7 @@ Dự án sử dụng **Bun**. Hãy đảm bảo bạn đã cài đặt Bun.
 
 ```bash
 # 1. Clone dự án
-git clone https://github.com/ntuan2502/gold-tracker.git
+git clone https://github.com/ntuan2502/oh-my-gold.git
 cd gold-tracker
 
 # 2. Cấu hình môi trường
