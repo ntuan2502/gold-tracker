@@ -10,10 +10,11 @@ import {
     XAxis,
     YAxis
 } from "recharts";
-import { format, parseISO, subDays, startOfMonth, subMonths, endOfMonth } from "date-fns";
+import { format, parseISO, subDays, startOfMonth, subMonths, endOfMonth, isValid } from "date-fns";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
+import { Calendar, AlertCircle } from "lucide-react";
 import {
     Select,
     SelectContent,
@@ -21,6 +22,17 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 
 interface HistoryItem {
     date: string;
@@ -46,9 +58,20 @@ export function GoldPriceChart({ data, loading, onRangeChange }: GoldPriceChartP
 
     const [range, setRange] = useState("30days");
     const [rangeLabel, setRangeLabel] = useState("30 ngày gần đây");
+    const [customOpen, setCustomOpen] = useState(false);
+    const [customDates, setCustomDates] = useState({
+        from: format(new Date(), 'yyyy-MM-dd'),
+        to: format(new Date(), 'yyyy-MM-dd')
+    });
+    const [error, setError] = useState<string>("");
 
     const handleRangeChange = (value: string) => {
         setRange(value);
+        if (value === "custom") {
+            setCustomOpen(true);
+            return;
+        }
+
         const today = new Date();
         let from = today;
         let to = today;
@@ -91,6 +114,34 @@ export function GoldPriceChart({ data, loading, onRangeChange }: GoldPriceChartP
         setRangeLabel(label);
         if (onRangeChange) {
             onRangeChange(format(from, 'dd/MM/yyyy'), format(to, 'dd/MM/yyyy'), label);
+        }
+    };
+
+    const applyCustomRange = () => {
+        setError(""); // Reset error
+        try {
+            const fromDate = parseISO(customDates.from);
+            const toDate = parseISO(customDates.to);
+
+            if (!isValid(fromDate) || !isValid(toDate)) {
+                setError("Ngày không hợp lệ.");
+                return;
+            }
+            if (fromDate > toDate) {
+                setError("Ngày bắt đầu không được lớn hơn ngày kết thúc.");
+                return;
+            }
+
+            const label = "Tùy chỉnh";
+
+            setRangeLabel(label);
+            if (onRangeChange) {
+                onRangeChange(format(fromDate, 'dd/MM/yyyy'), format(toDate, 'dd/MM/yyyy'), label);
+            }
+            setCustomOpen(false);
+        } catch (e) {
+            console.error("Invalid date", e);
+            setError("Có lỗi xảy ra.");
         }
     };
 
@@ -172,19 +223,33 @@ export function GoldPriceChart({ data, loading, onRangeChange }: GoldPriceChartP
                 <div className="flex flex-col gap-4">
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                         <CardTitle className="text-lg font-semibold">Biểu Đồ Giá Vàng ({rangeLabel})</CardTitle>
-                        <Select value={range} onValueChange={handleRangeChange}>
-                            <SelectTrigger className="w-[160px] h-8 text-xs">
-                                <SelectValue placeholder="30 ngày gần đây" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="today">Hôm nay</SelectItem>
-                                <SelectItem value="yesterday">Hôm qua</SelectItem>
-                                <SelectItem value="7days">7 ngày gần đây</SelectItem>
-                                <SelectItem value="30days">30 ngày gần đây</SelectItem>
-                                <SelectItem value="thisMonth">Tháng này</SelectItem>
-                                <SelectItem value="lastMonth">Tháng trước</SelectItem>
-                            </SelectContent>
-                        </Select>
+                        <div className="flex items-center gap-2">
+                            <Select value={range} onValueChange={handleRangeChange}>
+                                <SelectTrigger className="w-[160px] h-8 text-xs">
+                                    <SelectValue placeholder="30 ngày gần đây" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="today">Hôm nay</SelectItem>
+                                    <SelectItem value="yesterday">Hôm qua</SelectItem>
+                                    <SelectItem value="7days">7 ngày gần đây</SelectItem>
+                                    <SelectItem value="30days">30 ngày gần đây</SelectItem>
+                                    <SelectItem value="thisMonth">Tháng này</SelectItem>
+                                    <SelectItem value="lastMonth">Tháng trước</SelectItem>
+                                    <SelectItem value="custom">Tùy chỉnh...</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            {range === 'custom' && (
+                                <Button
+                                    variant="outline"
+                                    size="icon"
+                                    className="h-8 w-8 top-[1px] relative"
+                                    onClick={() => setCustomOpen(true)}
+                                    title="Chọn lại ngày"
+                                >
+                                    <Calendar className="h-4 w-4" />
+                                </Button>
+                            )}
+                        </div>
                     </div>
                     {/* Custom Legend (External) */}
                     <div className="flex flex-wrap gap-2">
@@ -306,6 +371,58 @@ export function GoldPriceChart({ data, loading, onRangeChange }: GoldPriceChartP
                     </ResponsiveContainer>
                 </div>
             </CardContent>
+
+            <Dialog open={customOpen} onOpenChange={setCustomOpen}>
+                <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                        <DialogTitle>Chọn khoảng thời gian</DialogTitle>
+                        <DialogDescription>
+                            Nhập ngày bắt đầu và kết thúc để xem biểu đồ giá.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid gap-4 py-4">
+                        {error && (
+                            <div className="flex items-center justify-center gap-2 rounded-md bg-red-50 p-2 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
+                                <AlertCircle className="h-4 w-4" />
+                                <span>{error}</span>
+                            </div>
+                        )}
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="from" className="text-right">
+                                Từ ngày
+                            </Label>
+                            <Input
+                                id="from"
+                                type="date"
+                                value={customDates.from}
+                                onChange={(e) => {
+                                    setCustomDates(prev => ({ ...prev, from: e.target.value }));
+                                    setError("");
+                                }}
+                                className="col-span-3"
+                            />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="to" className="text-right">
+                                Đến ngày
+                            </Label>
+                            <Input
+                                id="to"
+                                type="date"
+                                value={customDates.to}
+                                onChange={(e) => {
+                                    setCustomDates(prev => ({ ...prev, to: e.target.value }));
+                                    setError("");
+                                }}
+                                className="col-span-3"
+                            />
+                        </div>
+                    </div>
+                    <DialogFooter>
+                        <Button type="submit" onClick={applyCustomRange}>Xem biểu đồ</Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </Card>
     );
 }
