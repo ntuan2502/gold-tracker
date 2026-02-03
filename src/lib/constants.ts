@@ -11,3 +11,5 @@ export const SCRAPER_CONFIG = {
 };
 
 export const REFRESH_INTERVAL = 60000; // 1 minute
+
+export const MAX_VALID_GOLD_PRICE = 50000000; // 50 millions (Threshold for anomaly detection)
